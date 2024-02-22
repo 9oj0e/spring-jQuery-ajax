@@ -4,20 +4,39 @@
     <div class="card">
         <div class="card-header"><b>익명 글쓰기 화면입니다</b></div>
         <div class="card-body">
-            <form action="#">
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter author" name="author">
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter title" name="title">
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" rows="5" name="content"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary form-control">글쓰기완료</button>
-            </form>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Enter author" id="author" autocomplete="false">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Enter title" id="title" autocomplete="false">
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" rows="5" id="content"></textarea>
+            </div>
+            <button onclick="btnWrite()" class="btn btn-primary form-control">글쓰기완료</button>
         </div>
     </div>
 </div>
 
+<script>
+    function btnWrite() {
+        let board = {
+            author: $("#author").val(),
+            title: $("#title").val(),
+            content: $("#content").val()
+        };
+        $.ajax({
+            url: "/api/boards",
+            type: "post",
+            data: JSON.stringify(board),
+            contentType: "application/json; charset=utf-8"
+        })
+                .done((res) => {
+                    location.href = "/";
+                })
+                .fail((res) => {
+                    alert(res.responseJSON.msg);
+                });
+    }
+</script>
 {{> layout/footer}}
