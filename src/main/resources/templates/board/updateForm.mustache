@@ -2,22 +2,44 @@
 
 <div class="container p-5">
     <div class="card">
-        <div class="card-header"><b>익명 글수정 화면입니다</b></div>
-        <div class="card-body">
-            <form action="#">
+        <div class="card-header" id="card-box"><b>익명 글수정 화면입니다</b>
+            <div class="card-body">
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter author" name="author">
+                    <input type="text" class="form-control" placeholder="{{board.author}}" id="author">
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter title" name="title">
+                    <input type="text" class="form-control" placeholder="{{board.title}}" id="title">
                 </div>
                 <div class="mb-3">
-                    <textarea class="form-control" rows="5" name="content"></textarea>
+                    <textarea class="form-control" rows="5" id="content">{{board.content}}</textarea>
                 </div>
-                <button type="submit" class="btn btn-primary form-control">글수정완료</button>
-            </form>
+                <button onclick="btnUpdate()" class="btn btn-primary form-control">글수정완료</button>
+            </div>
+
         </div>
     </div>
-</div>
+    <script>
+        function btnUpdate() {
+            // 이하 saveForm과 같음.
+            let board = {
+                author: $("#author").val(),
+                title: $("#title").val(),
+                content: $("#content").val()
+            };
+            $.ajax({
+                url: `/api/board/{{board.id}}/update`,
+                type: "put",
+                data: JSON.stringify(board),
+                contentType: "application/json; charset=utf-8"
+            })
+                    .done((res) => {
+                        location.href = "/";
+                    })
+                    .fail((res) => {
+                        alert(res.responseJSON.msg);
+                        console.log(res);
+                    });
+        };
+    </script>
 
 {{> layout/footer}}

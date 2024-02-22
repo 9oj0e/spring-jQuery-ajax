@@ -10,6 +10,20 @@ import java.util.List;
 @RestController
 public class BoardApiController {
     private final BoardRepository boardRepository;
+    @GetMapping("/api/board/{id}/updateForm")
+    public ApiUtil<?> updateForm(@PathVariable Integer id, HttpServletResponse response){
+        Board board = boardRepository.selectOne(id);
+        if (board == null){
+            response.setStatus(404);
+            return new ApiUtil<>(404, "존재하지 않는 게시글입니다");
+        } // ControllerAdvice 에 throw하는게 낫다
+        return new ApiUtil<>(board);
+    }
+    @PutMapping("/api/board/{id}/update")
+    public ApiUtil<?> update(@PathVariable Integer id, @RequestBody BoardRequest.WriteDTO requestDTO){
+        boardRepository.updateById(requestDTO ,id);
+        return new ApiUtil<>(null);
+    }
     @PostMapping("/api/boards")
     public ApiUtil<?> write(@RequestBody BoardRequest.WriteDTO requestDTO){
         boardRepository.insert(requestDTO);
