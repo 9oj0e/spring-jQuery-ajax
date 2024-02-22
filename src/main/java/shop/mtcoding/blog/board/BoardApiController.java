@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.board;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +13,9 @@ public class BoardApiController {
     private final BoardRepository boardRepository;
 
     @GetMapping("/api/boards")
-    public ApiUtil<List<Board>> findAll(){
+    public ApiUtil<?> findAll(){
+//        response.setStatus(401);
         List<Board> boardList = boardRepository.selectAll();
-        return new ApiUtil<>(boardList);
+        return new ApiUtil<>(boardList); // MessageConverter 작동 (Object)
     }
 }
