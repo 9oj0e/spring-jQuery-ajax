@@ -19,8 +19,8 @@ public class BoardApiController {
         } // ControllerAdvice 에 throw하는게 낫다
         return new ApiUtil<>(board);
     }
-    @PutMapping("/api/board/{id}/update")
-    public ApiUtil<?> update(@PathVariable Integer id, @RequestBody BoardRequest.WriteDTO requestDTO){
+    @PutMapping("/api/board/{id}") // PutMapping이니까, 주소창에 /update를 첨가하지 않음.
+    public ApiUtil<?> update(@PathVariable Integer id, @RequestBody BoardRequest.UpdateDTO requestDTO){
         boardRepository.updateById(requestDTO ,id);
         return new ApiUtil<>(null);
     }
